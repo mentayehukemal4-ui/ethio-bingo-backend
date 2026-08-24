@@ -14,6 +14,7 @@ const io = new Server(server, { cors: { origin: "*" } });
 
 // የ ቦት Token (በ polling: true ተስተካክሏል)
 const token = '8950953716:AAFyQhK0_DSKysJc4WU1i_UnRnQVSEsYd2k';
+
 const bot = new TelegramBot(token, { polling: true });
 
 // Telegram Bot Start Command
