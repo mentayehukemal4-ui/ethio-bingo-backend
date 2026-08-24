@@ -12,21 +12,9 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
-// የ ቦት Token
+// የ ቦት Token (በ polling: true ተስተካክሏል)
 const token = '8950953716:AAFyQhK0_DSKysJc4WU1i_UnRnQVSEsYd2k';
-const bot = new TelegramBot(token);
-
-// Render የሚሰራበትን የዘመነ URL (Render Auto URL ወይም Environment Variable)
-const RENDER_URL = process.env.RENDER_EXTERNAL_URL || `https://ethio-bingo-backend-ix2f.onrender.com`;
-
-// Webhook ን ከ Render ሰርቨር ጋር ማያያዝ
-bot.setWebHook(`${RENDER_URL}/bot${token}`);
-
-// የቴሌግራም Webhook Endpoint
-app.post(`/bot${token}`, (req, res) => {
-  bot.processUpdate(req.body);
-  res.sendStatus(200);
-});
+const bot = new TelegramBot(token, { polling: true });
 
 // Telegram Bot Start Command
 bot.onText(/\/start/, (msg) => {
