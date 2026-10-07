@@ -1,0 +1,35 @@
+services:
+  backend:
+    image: node:22-slim
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+      # node_modules stays out of the repo (no lockfile committed), kept in a named volume
+      - node_modules:/app/node_modules
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+    env_file:
+      # platform-managed secrets (e.g. TELEGRAM_BOT_TOKEN); absent keys simply are not set
+      - /run/base44/app.env
+    command:
+      - sh
+      - -ec
+      - |
+        npm install --no-audit --no-fund --no-package-lock &&
+        exec node --watch server.js
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          node -e "fetch('http://127.0.0.1:3000/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    restart: on-failure
+
+volumes:
+  node_modules:

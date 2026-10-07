@@ -12,13 +12,17 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
-// የ ቦት Token (በ polling: true ተስተካክሏል)
-const token = '8950953716:AAFyQhK0_DSKysJc4WU1i_UnRnQVSEsYd2k';
+// የ ቦት Token — ከአካባቢ ተለዋዋጭ (TELEGRAM_BOT_TOKEN) ይነበባል
+const token = process.env.TELEGRAM_BOT_TOKEN;
 
-const bot = new TelegramBot(token, { polling: true });
+if (!token) {
+  console.warn("⚠️ TELEGRAM_BOT_TOKEN is not set — Telegram bot disabled.");
+}
+
+const bot = token ? new TelegramBot(token, { polling: true }) : null;
 
 // Telegram Bot Start Command
-bot.onText(/\/start/, (msg) => {
+bot?.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   
   bot.sendMessage(chatId, "እንኳን ወደ Beteseb Bingo በሰላም መጡ! 🎲🎉\n\nታች ያለውን አዝራር በመጫን ጨዋታውን ይጀምሩ።", {

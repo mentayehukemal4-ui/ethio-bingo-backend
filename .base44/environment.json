@@ -1,0 +1,12 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/",
+  "startCommand": "docker compose -f docker-compose.base44.yml up -d",
+  "secrets": [
+    {
+      "name": "TELEGRAM_BOT_TOKEN",
+      "description": "Telegram bot token for the Beteseb Bingo bot (from @BotFather). Optional at boot — the HTTP/Socket.IO server runs without it, only the Telegram bot stays disabled. The token previously hardcoded in server.js is exposed in git and should be revoked/rotated.",
+      "requiredAtBoot": false
+    }
+  ]
+}
